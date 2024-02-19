@@ -1,0 +1,5 @@
+pycryptodome
+tqdm
+setuptools
+wheel
+twine
