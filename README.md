@@ -135,7 +135,7 @@ We welcome contributions from the community to enhance and improve our encryptio
 ### Contact  
 **Author : Rakesh Kanna**  
 **E-Mail : rakeshkanna0108@gmail.com**  
-**Version : v0.1.0**  
+**Version : v0.1.2**  
 **Repository : https://github.com/rakeshkanna-rk/MonoCipher**  
     
 ### Project Under [MIT LICENSE](LICENSE)  
