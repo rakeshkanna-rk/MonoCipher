@@ -137,5 +137,6 @@ We welcome contributions from the community to enhance and improve our encryptio
 **E-Mail : rakeshkanna0108@gmail.com**  
 **Version : v0.1.2**  
 **Repository : https://github.com/rakeshkanna-rk/MonoCipher**  
+**PyPI : https://pypi.org/project/MonoCipher/**  
     
 ### Project Under [MIT LICENSE](LICENSE)  
