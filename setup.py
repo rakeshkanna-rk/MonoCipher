@@ -18,7 +18,7 @@ class CustomInstallCommand(install):
 
 setup(
     name='MonoCipher',
-    version='0.1.2',
+    version='0.1.3',
     description='A package for monoalphabetic ciphers (message encryption and decryption).',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -47,6 +47,18 @@ setup(
             'ByteDecrypt = MonoCipher.ByteEncryption:byte_decrypt',
             'SaltEncrypt = MonoCipher.SaltEncryption:salt_encrypt',
             'SaltDecrypt = MonoCipher.SaltEncryption:salt_decrypt',
+            'HmacEncrypt = MonoCipher.HmacEncryption:hmac_encrypt',
+            'HmacDecrypt = MonoCipher.HmacEncryption:hmac_decrypt',
+            'NonceEncrypt = MonoCipher.NonceEncryption:nonce_encrypt',
+            'NonceDecrypt = MonoCipher.NonceEncryption:nonce_decrypt',
+            'MacEncrypt = MonoCipher.MacEncryption:mac_encrypt',
+            'MacDecrypt = MonoCipher.MacEncryption:mac_decrypt',
         ]
-    }
+    },
+    keywords=['encryption', 'cryptography', 'security'],
+    classifiers=[
+        'Programming Language :: Python :: 3',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
+    ]
 )
