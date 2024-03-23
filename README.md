@@ -1,5 +1,5 @@
 ![MonoCipher](MonoCipher.png)
-  
+
 # MonoCipher
 **MonoCipher is python programmed package which allow users to encrypt and decrypt messages in three different levels**  
 1. **Simple Cryption with Shift number**  
@@ -32,8 +32,10 @@ pip install MonoCipher
   
 ---
   
+Certainly! Here's the updated usage section for the README.md file:
+
 ## Usage  
-  
+
 ### Simple Encryption Module:  
   
 #### shift_encrypt:  
@@ -123,6 +125,109 @@ password = "MySecretPassword"
 decrypted_message = salt_decrypt(salt, iv, ciphertext, password)
 print("Decrypted message:", decrypted_message)
 ```
+
+### HMAC Encryption Module:
+
+#### hmac_encrypt:
+Encrypts a message using HMAC authentication.
+
+```python
+from MonoCipher.HmacEncryption import hmac_encrypt
+
+message = "Hello, World!"
+password = "MySecretPassword"
+
+salt, nonce, ciphertext, tag = hmac_encrypt(message, password)
+print("Salt:", salt)
+print("Nonce:", nonce)
+print("Ciphertext:", ciphertext)
+print("Tag:", tag)
+```
+
+#### hmac_decrypt:
+Decrypts a message encrypted with HMAC authentication using the same parameters.
+
+```python
+from MonoCipher.HmacEncryption import hmac_decrypt
+
+salt = "some_base64_encoded_salt"
+nonce = "some_base64_encoded_nonce"
+ciphertext = "some_base64_encoded_ciphertext"
+tag = "some_base64_encoded_tag"
+password = "MySecretPassword"
+
+decrypted_message = hmac_decrypt(salt, nonce, ciphertext, tag, password)
+print("Decrypted message:", decrypted_message)
+```
+
+### Nonce Encryption Module:
+
+#### nonce_encrypt:
+Encrypts a message using a nonce for authentication.
+
+```python
+from MonoCipher.NonceEncryption import nonce_encrypt
+
+message = "Hello, World!"
+password = "MySecretPassword"
+
+salt, nonce, ciphertext, tag = nonce_encrypt(message, password)
+print("Salt:", salt)
+print("Nonce:", nonce)
+print("Ciphertext:", ciphertext)
+print("Tag:", tag)
+```
+
+#### nonce_decrypt:
+Decrypts a message encrypted with a nonce for authentication using the same parameters.
+
+```python
+from MonoCipher.NonceEncryption import nonce_decrypt
+
+salt = "some_base64_encoded_salt"
+nonce = "some_base64_encoded_nonce"
+ciphertext = "some_base64_encoded_ciphertext"
+tag = "some_base64_encoded_tag"
+password = "MySecretPassword"
+
+decrypted_message = nonce_decrypt(salt, nonce, ciphertext, tag, password)
+print("Decrypted message:", decrypted_message)
+```
+
+### MAC Encryption Module:
+
+#### mac_encrypt:
+Encrypts a message using AES-GCM with a provided password.
+
+```python
+from MonoCipher.MacEncryption import mac_encrypt
+
+message = "Hello, World!"
+password = "MySecretPassword"
+
+salt, nonce, ciphertext, tag = mac_encrypt(message, password)
+print("Salt:", salt)
+print("Nonce:", nonce)
+print("Ciphertext:", ciphertext)
+print("Tag:", tag)
+```
+
+#### mac_decrypt:
+Decrypts a message encrypted with AES-GCM using the same parameters.
+
+```python
+from MonoCipher.MacEncryption import mac_decrypt
+
+salt = "some_base64_encoded_salt"
+nonce = "some_base64_encoded_nonce"
+ciphertext = "some_base64_encoded_ciphertext"
+tag = "some_base64_encoded_tag"
+password = "MySecretPassword"
+
+decrypted_message = mac_decrypt(salt, nonce, ciphertext, tag, password)
+print("Decrypted message:", decrypted_message)
+```
+
   
 These are the usages for each of the six functions provided by the encryption modules. You can customize the input values such as the message, shift value, password, IV, and ciphertext according to your requirements.
     
@@ -135,7 +240,7 @@ We welcome contributions from the community to enhance and improve our encryptio
 ### Contact  
 **Author : Rakesh Kanna**  
 **E-Mail : rakeshkanna0108@gmail.com**  
-**Version : v0.1.2**  
+**Version : v0.1.3**  
 **Repository : https://github.com/rakeshkanna-rk/MonoCipher**  
 **PyPI : https://pypi.org/project/MonoCipher/**  
     
