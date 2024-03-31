@@ -1,24 +1,14 @@
 from setuptools import setup, find_packages
 from setuptools.command.install import install
-from tqdm import tqdm
 import time
+
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-# Custom install command that shows progress using tqdm
-class CustomInstallCommand(install):
-    def run(self):
-        # Call the parent class method
-        install.run(self)
-        
-        # Simulate installation progress with tqdm
-        for i in tqdm(range(100)):
-            time.sleep(0.1)
-
 setup(
     name='MonoCipher',
-    version='0.1.3',
+    version='0.1.4b0',
     description='A package for monoalphabetic ciphers (message encryption and decryption).',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -33,26 +23,13 @@ setup(
     packages=find_packages(),
     install_requires=[
         "pycryptodome>=3.20.0",
-        'tqdm'
+        "click>=8.1.7",
+        "colorama>=0.4.6"
     ],
-    cmdclass={
-        'install': CustomInstallCommand,
-    },
     python_requires='>=3.6',
     entry_points={
         'console_scripts': [
-            'ShiftEncrypt = MonoCipher.SimpleEncryption:shift_encrypt',
-            'ShiftDecrypt = MonoCipher.SimpleEncryption:shift_decrypt',
-            'ByteEncrypt = MonoCipher.ByteEncryption:byte_encrypt',
-            'ByteDecrypt = MonoCipher.ByteEncryption:byte_decrypt',
-            'SaltEncrypt = MonoCipher.SaltEncryption:salt_encrypt',
-            'SaltDecrypt = MonoCipher.SaltEncryption:salt_decrypt',
-            'HmacEncrypt = MonoCipher.HmacEncryption:hmac_encrypt',
-            'HmacDecrypt = MonoCipher.HmacEncryption:hmac_decrypt',
-            'NonceEncrypt = MonoCipher.NonceEncryption:nonce_encrypt',
-            'NonceDecrypt = MonoCipher.NonceEncryption:nonce_decrypt',
-            'MacEncrypt = MonoCipher.MacEncryption:mac_encrypt',
-            'MacDecrypt = MonoCipher.MacEncryption:mac_decrypt',
+            'monocipher = MonoCipher:mc_cli' 
         ]
     },
     keywords=['encryption', 'cryptography', 'security'],
