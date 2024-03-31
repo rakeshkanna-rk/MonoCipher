@@ -202,8 +202,8 @@ Encrypts a message using AES-GCM with a provided password.
 ```python
 from MonoCipher.MacEncryption import mac_encrypt
 
-message = "Hello, World!"
 password = "MySecretPassword"
+message = "Hello, World!"
 
 salt, nonce, ciphertext, tag = mac_encrypt(message, password)
 print("Salt:", salt)
@@ -232,7 +232,110 @@ print("Decrypted message:", decrypted_message)
 These are the usages for each of the six functions provided by the encryption modules. You can customize the input values such as the message, shift value, password, IV, and ciphertext according to your requirements.
     
 ---
-  
+
+
+# MonoCipher CLI
+
+MonoCipher CLI is a command-line tool for performing various cryptographic operations such as encryption, decryption, and hashing. It offers a user-friendly interface and supports multiple encryption algorithms.
+
+## Features
+
+- Encryption and decryption using symmetric and asymmetric encryption algorithms
+- Hashing data with different hash functions
+- Command-line interface for easy interaction
+- Progress bar during updates
+- Seamless integration with pip for package updates
+
+## Installation
+
+You can install MonoCipher CLI via pip:
+
+```bash
+pip install MonoCipher
+```
+
+## Usage
+
+After installing MonoCipher CLI, you can use it from the command line. Here are some examples of how to use it:
+
+- **Shift Encryption:**
+```bash
+MonoCipher shiftencrypt --message "Hello, World!" --shift 3
+```
+
+- **Shift Decryption:**
+```bash
+MonoCipher shiftdecrypt --encrypted-message "Khoor, Zruog!" --shift 3
+```
+
+- **Byte Encryption:**
+```bash
+MonoCipher byteencrypt --message "Hello, World!" --password "MySecretPassword"
+```
+
+- **Byte Decryption:**
+```bash
+MonoCipher bytedecrypt --iv "iv_value" --ciphertext "ciphertext_value" --password "MySecretPassword"
+```
+
+- **Salt Encryption:**
+```bash
+MonoCipher saltencrypt --message "Hello, World!" --password "MySecretPassword"
+```
+
+- **Salt Decryption:**
+```bash
+MonoCipher saltdecrypt --salt "salt_value" --iv "iv_value" --ciphertext "ciphertext_value" --password "MySecretPassword"
+```
+
+- **HMAC Encryption:**
+```bash
+MonoCipher hmacencrypt --message "Hello, World!" --password "MySecretPassword"
+```
+
+- **HMAC Decryption:**
+```bash
+MonoCipher hmacdecrypt --salt "salt_value" --iv "iv_value" --ciphertext "ciphertext_value" --hmac "hmac_value" --password "MySecretPassword"
+```
+
+- **MAC Encryption:**
+```bash
+MonoCipher macencrypt --message "Hello, World!" --password "MySecretPassword"
+```
+
+- **MAC Decryption:**
+```bash
+MonoCipher macdecrypt --salt "salt_value" --nonce "nonce_value" --ciphertext "ciphertext_value" --tag "tag_value" --password "MySecretPassword"
+```
+
+- **Nonce Encryption:**
+```bash
+MonoCipher nonceencrypt --message "Hello, World!" --password "MySecretPassword"
+```
+
+- **Nonce Decryption:**
+```bash
+MonoCipher noncedecrypt --salt "salt_value" --nonce "nonce_value" --ciphertext "ciphertext_value" --tag "tag_value" --password "MySecretPassword"
+```
+
+For more detailed usage information, you can run:
+
+```bash
+MonoCipher --help
+```
+
+## Update
+
+You can update MonoCipher CLI to the latest version using the following command:
+
+```bash
+MonoCipher update
+```
+
+This command will upgrade MonoCipher CLI to the latest version. It also includes a progress bar to track the update progress.
+
+---
+
 ### Contributions Welcome
   
 We welcome contributions from the community to enhance and improve our encryption project. Whether you're interested in adding new features, fixing bugs, improving documentation, or suggesting ideas, your contributions are highly appreciated.
@@ -240,7 +343,7 @@ We welcome contributions from the community to enhance and improve our encryptio
 ### Contact  
 **Author : Rakesh Kanna**  
 **E-Mail : rakeshkanna0108@gmail.com**  
-**Version : v0.1.3**  
+**Version : v0.1.4 beta**  
 **Repository : https://github.com/rakeshkanna-rk/MonoCipher**  
 **PyPI : https://pypi.org/project/MonoCipher/**  
     
