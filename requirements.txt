@@ -1,4 +1,6 @@
 pycryptodome
+click
+colorama
 tqdm
 setuptools
 wheel
