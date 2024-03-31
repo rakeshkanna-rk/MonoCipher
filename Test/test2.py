@@ -41,8 +41,3 @@ def test_mac_cipher():
     
     assert decrypted_message == message, "MAC encryption/decryption failed"
     print("MAC cipher test passed.")
-
-if __name__ == "__main__":
-    test_hmac_cipher()
-    test_nonce_cipher()
-    test_mac_cipher()
