@@ -21,17 +21,15 @@ This Python code implements message encryption and decryption using the AES-GCM 
 password = "MySecretPassword"
 message = "Hello, World!"
 
-mac_encryption = MacEncryption(password)
-
 # Encryption
-salt, nonce, ciphertext, tag = mac_encryption.mac_encrypt(message)
+salt, nonce, ciphertext, tag = mac_encrypt(message)
 print("Salt:", salt)
 print("Nonce:", nonce)
 print("Ciphertext:", ciphertext)
 print("Tag:", tag)
 
 # Decryption
-decrypted_message = mac_encryption.mac_decrypt(salt, nonce, ciphertext, tag)
+decrypted_message = mac_decrypt(salt, nonce, ciphertext, tag)
 print("Decrypted message:", decrypted_message)
 ```
 
