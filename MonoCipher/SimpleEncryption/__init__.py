@@ -11,6 +11,9 @@ def shift_encrypt(message, shift):
     Returns:
         str: The encrypted message.
     """
+    if shift >= 1000:
+        return 'Shift value must be between 0 and 1000'
+
     encrypted_message = ""
     for char in message:
         if char.isalpha():
@@ -41,6 +44,9 @@ def shift_decrypt(encrypted_message, shift):
     Returns:
         str: The decrypted message.
     """
+    if shift >= 1000:
+        return 'Shift value must be between 0 and 1000'
+    
     decrypted_message = ""
     for char in encrypted_message:
         if char.isalpha():
