@@ -38,9 +38,3 @@ def test_salt_cipher():
     decrypted_message = salt_decrypt(salt, iv, ciphertext, password)
     assert decrypted_message == message, "Salt encryption/decryption failed"
     print("Salt cipher test passed.")
-
-
-if __name__ == "__main__":
-    test_shift_cipher()
-    test_byte_cipher()
-    test_salt_cipher()
