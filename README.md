@@ -251,7 +251,7 @@ MonoCipher CLI is a command-line tool for performing various cryptographic opera
 You can install MonoCipher CLI via pip:
 
 ```bash
-pip install MonoCipher
+pip install MonoCipher==0.1.4b0
 ```
 
 ## Usage
