@@ -15,6 +15,7 @@ def byte_encrypt(message, keys):
     Returns:
         tuple: A tuple containing the initialization vector (iv) and the ciphertext.
     """
+
     key = bytes(keys, encoding="utf-8")
     cipher = AES.new(key, AES.MODE_CBC)
     ciphertext = cipher.encrypt(pad(message.encode(), AES.block_size))

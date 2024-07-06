@@ -24,3 +24,9 @@ env/
 .DS_Store
 .idea/
 .vscode/
+.pytest_cache
+
+# Additional files and directories to ignore
+*.egg-info/
+dist/
+build/
