@@ -1,6 +1,17 @@
+# OS
+import os
+import sys
+import subprocess
+import time
+
 #textPlay
 from textPlay.colors import *
 from textPlay import options
+from textPlay import progress_bar_loader
+
+# ASCII ART
+import pyfiglet
+TITLE = f"{BLUE}\n{pyfiglet.figlet_format("MonoCipher")}"
 
 # ENCRYPTION MODULES
 from MonoCipher.ByteEncryption import byte_encrypt, byte_decrypt # ..checked
@@ -15,17 +26,7 @@ VERSION = 'v0.1.4 beta'
 
 # Varibles
 breaker = '\n  —————————————————'
-
-# Header
-header = f'''{BLUE}
- __  __                    ____ _       _
-|  \/  | ___  _ __   ___  / ___(_)_ __ | |__   ___ _ __ 
-| |\/| |/ _ \| '_ \ / _ \| |   | | '_ \| '_ \ / _ \ '__|
-| |  | | (_) | | | | (_) | |___| | |_) | | | |  __/ |   
-|_|  |_|\___/|_| |_|\___/ \____|_| .__/|_| |_|\___|_|   
-                                 |_|
-'''
-    
+breaker2 = '\n  ================='
 
 def checker(holder, check, err, typ: type):
     if typ == str:
@@ -83,6 +84,16 @@ def ciphertext_():
     ciphertext = checker(ciphertext, '', 'Please enter the Ciphertext', str)
     return ciphertext
 
+def nonce_():
+    nonce = f"{BLUE}Enter your Nonce: {RESET}"
+    nonce = checker(nonce, '', 'Please enter the Nonce', str)
+    return nonce
+
+def tag_():
+    tag = f"{BLUE}Enter your Tag: {RESET}"
+    tag = checker(tag, '', 'Please enter the Tag', str)
+    return tag
+
 def password_():
     pws = f"{BLUE}Enter the password: {RESET}"
     pws = checker(pws, '', 'Please enter the password', str)
@@ -121,13 +132,11 @@ def byte_dec():
     iv = iv_()
     ciphertext = ciphertext_()
     password = password_()
-
     key_length = 16
     if len(password) > key_length:
             password = password[:key_length]  
     elif len(password) < key_length:
         password = password.ljust(key_length, '0')  
-
     print(f"Decrypted Message: {byte_decrypt(iv, ciphertext, password)}")
 
 def salt_enc():
@@ -146,7 +155,71 @@ def salt_dec():
     except Exception:
         print(f"{RED}Incorrect Inputs{RESET}")
 
+def hmac_enc():
+    msg = msg_()
+    pws = password_fst()
+    salt, nonce, ciphertext, tag = hmac_encrypt(msg, pws)
+    print(f"Salt: {salt} \nNonce: {nonce} \nCiphertext: {ciphertext} \nTag: {tag}")
 
+def hmac_dec():
+    salt = salt_()
+    nonce = nonce_()
+    ciphertext = ciphertext_()
+    tag = tag_()
+    pws = password_()
+    try:
+        print(f"Decrypted Message: {hmac_decrypt(salt, nonce, ciphertext, tag, pws)}")
+    except Exception:
+        print(f"{RED}Incorrect Inputs{RESET}")
+
+def nonce_enc():
+    msg = msg_()
+    pws = password_fst()
+    salt, nonce, ciphertext, tag = nonce_encrypt(msg, pws)
+    print(f"Salt: {salt} \nNonce: {nonce} \nCiphertext: {ciphertext} \nTag: {tag}")
+
+def nonce_dec():
+    salt = salt_()
+    nonce = nonce_()
+    ciphertext = ciphertext_()
+    tag = tag_()
+    pws = password_()
+    try:
+        print(f"Decrypted Message: {nonce_decrypt(salt, nonce, ciphertext, tag, pws)}")
+    except Exception:
+        print(f"{RED}Incorrect Inputs{RESET}")
+
+def mac_enc():
+    msg = msg_()
+    pws = password_fst()
+    salt, nonce, ciphertext, tag = mac_encrypt(msg, pws)
+    print(f"Salt: {salt} \nNonce: {nonce} \nCiphertext: {ciphertext} \nTag: {tag}")
+
+def mac_dec():
+    salt = salt_()
+    nonce = nonce_()
+    ciphertext = ciphertext_()
+    tag = tag_()
+    pws = password_()
+    try:
+        print(f"Decrypted Message: {mac_decrypt(salt, nonce, ciphertext, tag, pws)}")
+    except Exception:
+        print(f"{RED}Incorrect Inputs{RESET}")
+
+def update():
+    try:
+        print(f'{GREEN}Updating...{RESET}')
+        # Suppress stdout and stderr to hide pip upgrade messages
+        with open(os.devnull, "w") as devnull:
+            # Execute pip upgrade command and suppress output
+            subprocess.check_call(["pip", "install", "--upgrade", "MonoCipher"], stdout=devnull, stderr=subprocess.STDOUT)     
+        progress_bar_loader() 
+        print(f'\n\n\t{GREEN}Updated Successfully ✔{RESET}\n')
+    except Exception as e:
+        print(f'{RED}Your Update Failed due to {e}{RESET}')
+
+def exit():
+    print(f"{RED}Exiting...{RESET}")
 
 def start():
     options(option=[('Shift Encryption', lambda: shift_enc()),
@@ -154,9 +227,24 @@ def start():
                     ('Byte Encryption', lambda: byte_enc()),
                     (f'Byte Decryption {breaker}', lambda: byte_dec()),
                     ('Salt Encryption', lambda: salt_enc()),
-                    (f'Salt Decryption {breaker}', lambda: salt_dec())],
-                    # TODO: Add other methods
+                    (f'Salt Decryption {breaker}', lambda: salt_dec()),
+                    ('Hmac Encryption', lambda: hmac_enc()),
+                    (f'Hmac Decryption {breaker}', lambda: hmac_dec()),
+                    ('Nonce Encryption', lambda: nonce_enc()),
+                    (f'Nonce Decryption {breaker}', lambda: nonce_dec()),
+                    ('Mac Encryption', lambda: mac_enc()),
+                    (f'Mac Decryption {breaker2}', lambda: mac_dec()),
+                    (f'{CYAN}Update{RESET}', lambda: update()),
+                    (f'{RED}Exit{RESET}', lambda: exit())],
                     index=f"{MAGENTA}>{RESET}", 
-                    head=header)
+                    head=TITLE)
 
 start()
+
+def cli():
+    if len(sys.argv) < 1:
+        print(f"{RED}No Input Provided{RESET}")
+        print(f"{YELLOW}Usage: MonoCipher <option>{RESET}")
+
+# TODO: Create Argument Parser with sys.argv
+# TODO: Argv options version, help, settings (optional), etc.
