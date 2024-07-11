@@ -27,6 +27,14 @@ VERSION = 'v0.1.4 beta'
 # Varibles
 breaker = '\n  —————————————————'
 breaker2 = '\n  ================='
+help_cli ='''Usage: MonoCipher <option>
+
+Options:
+ -h, --help          show this help message and exit
+ -v, --version       show the version number and exit
+ -m, --menu          Open main menu
+ -s, --settings      Open settings window
+'''
 
 def checker(holder, check, err, typ: type):
     if typ == str:
@@ -239,12 +247,35 @@ def start():
                     index=f"{MAGENTA}>{RESET}", 
                     head=TITLE)
 
-start()
-
 def cli():
-    if len(sys.argv) < 1:
-        print(f"{RED}No Input Provided{RESET}")
-        print(f"{YELLOW}Usage: MonoCipher <option>{RESET}")
+    try:
+        if len(sys.argv) > 3:
+            print(f"{RED}Invalid Input Provided{RESET}")
+            print(help_cli)
 
-# TODO: Create Argument Parser with sys.argv
-# TODO: Argv options version, help, settings (optional), etc.
+
+        elif sys.argv[1] == '--help' or sys.argv[1] == '-h':
+            print(TITLE)
+            print(help_cli)
+
+        elif sys.argv[1] == '--menu' or sys.argv[1] == '-m':
+            print(f"{GREEN} Openig Menu...{RESET}")
+            time.sleep(2)
+            start()
+
+        elif sys.argv[1] == '--version' or sys.argv[1] == '-v':
+            print(f"{BLUE}MonoCipher {MAGENTA}{VERSION}{RESET}")
+
+        elif sys.argv[1] == '--settings' or sys.argv[1] == '-s':
+            print(f"{GREEN} Openig Settings...{RESET}", end="\r")
+            # TODO: Add settings options
+
+        else:
+            print(f"{RED}Invalid Input Provided{RESET}")
+            print(help_cli)
+            
+
+    except IndexError :
+        start()
+
+cli()
