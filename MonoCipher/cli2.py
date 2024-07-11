@@ -264,6 +264,7 @@ def cli():
             start()
 
         elif sys.argv[1] == '--version' or sys.argv[1] == '-v':
+            print(TITLE)
             print(f"{BLUE}MonoCipher {MAGENTA}{VERSION}{RESET}")
 
         elif sys.argv[1] == '--settings' or sys.argv[1] == '-s':
