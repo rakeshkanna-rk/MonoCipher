@@ -269,7 +269,26 @@ def cli():
 
         elif sys.argv[1] == '--settings' or sys.argv[1] == '-s':
             print(f"{GREEN} Openig Settings...{RESET}", end="\r")
-            # TODO: Add settings options
+            folder_path = "~/.MonoCipher"
+            if os.path.isdir(folder_path):
+                print(f"The folder {folder_path} exists.")
+            else:
+                print(f"The folder {folder_path} does not exist.")
+                fld_loop = True
+                while fld_loop:
+                    crt_fld = input("Do you like to import the settings? (y/n): ")
+                    if crt_fld == 'y':
+                        # TODO: Import settings from enternet
+                        # TODO: Import settings.json
+                        # TODO: Make settings editable
+                        print("Settings imported successfully.")
+                        fld_loop = False
+                    elif crt_fld == 'n':
+                        print("Settings not imported.")
+                        fld_loop = False
+                    else:
+                        print("Invalid input. Please enter 'y' or 'n'.")
+
 
         else:
             print(f"{RED}Invalid Input Provided{RESET}")
