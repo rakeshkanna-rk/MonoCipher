@@ -248,6 +248,7 @@ def start():
                     head=TITLE)
 
 def cli():
+    # TODO: Load JSON file from settings.json || os.path.expanduser('~/.monocipher/settings.json') 
     try:
         if len(sys.argv) > 3:
             print(f"{RED}Invalid Input Provided{RESET}")
@@ -268,19 +269,23 @@ def cli():
             print(f"{BLUE}MonoCipher {MAGENTA}{VERSION}{RESET}")
 
         elif sys.argv[1] == '--settings' or sys.argv[1] == '-s':
-            print(f"{GREEN} Openig Settings...{RESET}", end="\r")
-            folder_path = "~/.MonoCipher"
-            if os.path.isdir(folder_path):
-                print(f"The folder {folder_path} exists.")
+            print(f"{GREEN} Opening Settings...{RESET}")
+            settings_path = os.path.expanduser("~/.monocipher")
+            create_dir(settings_path)
+            run_path = os.path.join(settings_path, "settings.py")
+            json_path = os.path.join(settings_path, "settings.json")
+            print(run_path)
+            if os.path.exists(run_path) and os.path.exists(json_path):
+                subprocess.run(["python", run_path])
+
+
             else:
-                print(f"The folder {folder_path} does not exist.")
+                print(f"The settings folder does not exist or corrupted.")
                 fld_loop = True
                 while fld_loop:
                     crt_fld = input("Do you like to import the settings? (y/n): ")
                     if crt_fld == 'y':
-                        # TODO: Import settings from enternet
-                        # TODO: Import settings.json
-                        # TODO: Make settings editable
+                        import_file(os.path.expanduser("~/"))
                         print("Settings imported successfully.")
                         fld_loop = False
                     elif crt_fld == 'n':
@@ -297,5 +302,12 @@ def cli():
 
     except IndexError :
         start()
+
+def create_dir(DIR):
+    os.makedirs(DIR, exist_ok=True)
+
+def import_file(path):
+    # TODO: Import settings from GDrive || gdown
+    pass
 
 cli()
