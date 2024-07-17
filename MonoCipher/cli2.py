@@ -3,6 +3,7 @@ import os
 import sys
 import subprocess
 import time
+import json
 
 #textPlay
 from textPlay.colors import *
@@ -11,7 +12,7 @@ from textPlay import progress_bar_loader
 
 # ASCII ART
 import pyfiglet
-TITLE = f"{BLUE}\n{pyfiglet.figlet_format("MonoCipher")}"
+
 
 # ENCRYPTION MODULES
 from MonoCipher.ByteEncryption import byte_encrypt, byte_decrypt # ..checked
@@ -35,6 +36,36 @@ Options:
  -m, --menu          Open main menu
  -s, --settings      Open settings window
 '''
+
+# Fetch user settings
+settings = os.path.expanduser("~/.monocipher/settings.json")
+with open(settings) as f:
+    settings = json.load(f)
+
+s_name = settings['metadata']['Name']
+s_password = settings['metadata']['password']
+s_id = settings['metadata']['solid_id']
+logo = settings['settings']['logo']
+save_pws = settings['settings']['save_pws']
+
+
+if  s_password and s_id and s_name == '':
+    print(f"{RED}Configuration not found.{RESET}")
+    with open(os.devnull, "w") as devnull:
+            subprocess.check_call(["MonoCipher","--settings"], stdout=devnull, stderr=subprocess.STDOUT)
+
+if logo:
+    TITLE = f"{BLUE}\n{pyfiglet.figlet_format("MonoCipher")}"
+else:
+    TITLE = ''
+
+def crt_file(name):
+    pass # TODO : Create file fn
+
+
+def save_pass():
+    pass # TODO : Save Password fn
+
 
 def checker(holder, check, err, typ: type):
     if typ == str:
