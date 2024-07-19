@@ -55,42 +55,48 @@ else:
     TITLE = ''
 
 def config():
-    if s_password == '' and s_id == '' and s_name == '':
+    global s_name, s_id, s_password
+    if s_password == '' or s_id == '' or s_name == '':
         print(f"{RED}Configuration not found.{RESET}")
         for i in range(3):
             time.sleep(1)
-            print(f"Opening settings in {i} second...")
-            subprocess.run(["MonoCipher", "--settings"])
+            print(f"Opening settings in {i} second...", end="\r")
+        open_setting()
 
-
-
-
+    else:
+        print(f"{GREEN}Configuration found.{RESET}")
+        time.sleep(1)
 
 def crt_file():
     with open(save_pws_json, 'w') as j_file:
-        json.dump({'created_on': f'{time.localtime()}'}, j_file)
+        json.dump({'created_on': f'{time.localtime()[3]}:{time.localtime()[4]}'}, j_file)
 
 
-def save_pass(msg, pws):
+def save_pass(msg, pws, enc_mode):
+    global save_pws
     if save_pws:
         if os.path.exists(save_pws_json):
-            with open(save_pws_json, 'a') as j_file:
-                json.dump({'msg': msg, 'password': pws}, j_file)
+            with open(save_pws_json, 'r+') as j_file:
+                read_data = j_file.read()
+                if read_data == '':
+                    time_ = f'{time.localtime()[3]}:{time.localtime()[4]}'
+                    date = {'created_on': time_}
+                    json.dump(date, j_file)
+
+            with open(save_pws_json) as j_file:
+                ext_data = json.load(j_file)
+            data = {'msg': msg, 'password': pws, 'method': enc_mode}
+            wrt_data = {ext_data, data} # TODO: Fix this bug || TypeError: unhashable type: 'dict'
+            with open(save_pws_json, 'w') as j_file:
+                json.dump(wrt_data, j_file)
 
         else:
             crt_file()
             with open(save_pws_json, 'a') as j_file:
-                json.dump({'msg': msg, 'password': pws}, j_file)
-
-    else:
-        print(f"{RED}Save password option is disabled.{RESET}")
-        for i in range(3):
-            time.sleep(1)
-            print(f"Opening settings in {i} second...")
-            subprocess.run(["MonoCipher", "--settings"])
-
+                json.dump({'msg': msg, 'password': pws, 'method': enc_mode}, j_file)
             
-
+        print(f"{GREEN}Password Saved{RESET}", end="\r")
+        time.sleep(1)
 
 def checker(holder, check, err, typ: type):
     if typ == str:
@@ -172,6 +178,7 @@ def shift_enc():
     msg = msg_()
     sht = f"{BLUE}Enter your shift value: {RESET}"
     sht = checker(sht, 0, 'Please enter a shift value (1-500)', int)
+    save_pass(msg, sht, 'shift')
     print(f"Encrypted Message: {shift_encrypt(msg, sht)}")
     
 def shift_dec():
@@ -190,6 +197,7 @@ def byte_enc():
         password = password.ljust(key_length, '0')
 
     iv, ciphertext = byte_encrypt(msg, password)
+    save_pass(msg, password, 'byte')
     print(f"IV: {iv} \nCiphertext: {ciphertext}")
 
 def byte_dec():
@@ -207,6 +215,7 @@ def salt_enc():
     msg = msg_()
     pws = password_fst()
     salt, iv, ciphertext = salt_encrypt(msg, pws)
+    save_pass(msg, pws, 'salt')
     print(f"Salt: {salt} \nIV: {iv} \nCiphertext: {ciphertext}")
     
 def salt_dec():
@@ -223,6 +232,7 @@ def hmac_enc():
     msg = msg_()
     pws = password_fst()
     salt, nonce, ciphertext, tag = hmac_encrypt(msg, pws)
+    save_pass(msg, pws, 'hmac')
     print(f"Salt: {salt} \nNonce: {nonce} \nCiphertext: {ciphertext} \nTag: {tag}")
 
 def hmac_dec():
@@ -240,6 +250,7 @@ def nonce_enc():
     msg = msg_()
     pws = password_fst()
     salt, nonce, ciphertext, tag = nonce_encrypt(msg, pws)
+    save_pass(msg, pws, 'nonce')
     print(f"Salt: {salt} \nNonce: {nonce} \nCiphertext: {ciphertext} \nTag: {tag}")
 
 def nonce_dec():
@@ -257,6 +268,7 @@ def mac_enc():
     msg = msg_()
     pws = password_fst()
     salt, nonce, ciphertext, tag = mac_encrypt(msg, pws)
+    save_pass(msg, pws, 'mac')
     print(f"Salt: {salt} \nNonce: {nonce} \nCiphertext: {ciphertext} \nTag: {tag}")
 
 def mac_dec():
@@ -286,6 +298,29 @@ def exit():
     print(f"{RED}Exiting...{RESET}")
  
 
+def open_setting():
+    print(f"{GREEN} Opening Settings...{RESET}")
+    settings_path = os.path.expanduser("~/.monocipher")
+    create_dir(settings_path)
+    run_path = os.path.join(settings_path, "settings.py")
+    json_path = os.path.join(settings_path, "settings.json")
+    if os.path.exists(run_path) and os.path.exists(json_path):
+        subprocess.run(["python", run_path])
+    else:
+        print(f"The settings folder does not exist or corrupted.")
+        fld_loop = True
+        while fld_loop:
+            crt_fld = input("Do you like to import the settings? (y/n): ")
+            if crt_fld == 'y':
+                import_file(os.path.expanduser("~/"))
+                print("Settings imported successfully.")
+                fld_loop = False
+            elif crt_fld == 'n':
+                print("Settings not imported.")
+                fld_loop = False
+            else:
+                print("Invalid input. Please enter 'y' or 'n'.")
+
 def start():
     options(option=[('Shift Encryption', lambda: shift_enc()),
                     (f'Shift Decryption {breaker}', lambda: shift_dec()),
@@ -306,8 +341,8 @@ def start():
 
 def cli():
     # TODO: Load JSON file from settings.json || os.path.expanduser('~/.monocipher/settings.json') 
-    config() # TODO : ERROR unable to run this process 
     try:
+        config()
         if len(sys.argv) > 3:
             print(f"{RED}Invalid Input Provided{RESET}")
             print(help_cli)
@@ -327,27 +362,7 @@ def cli():
             print(f"{BLUE}MonoCipher {MAGENTA}{VERSION}{RESET}")
 
         elif sys.argv[1] == '--settings' or sys.argv[1] == '-s':
-            print(f"{GREEN} Opening Settings...{RESET}")
-            settings_path = os.path.expanduser("~/.monocipher")
-            create_dir(settings_path)
-            run_path = os.path.join(settings_path, "settings.py")
-            json_path = os.path.join(settings_path, "settings.json")
-            if os.path.exists(run_path) and os.path.exists(json_path):
-                subprocess.run(["python", run_path])
-            else:
-                print(f"The settings folder does not exist or corrupted.")
-                fld_loop = True
-                while fld_loop:
-                    crt_fld = input("Do you like to import the settings? (y/n): ")
-                    if crt_fld == 'y':
-                        import_file(os.path.expanduser("~/"))
-                        print("Settings imported successfully.")
-                        fld_loop = False
-                    elif crt_fld == 'n':
-                        print("Settings not imported.")
-                        fld_loop = False
-                    else:
-                        print("Invalid input. Please enter 'y' or 'n'.")
+            open_setting()
 
 
         else:
