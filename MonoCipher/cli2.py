@@ -39,6 +39,7 @@ Options:
 
 # Fetch user settings
 settings = os.path.expanduser("~/.monocipher/settings.json")
+save_pws_json = os.path.expanduser("~/.monocipher/save_pws.json")
 with open(settings) as f:
     settings = json.load(f)
 
@@ -48,23 +49,47 @@ s_id = settings['metadata']['solid_id']
 logo = settings['settings']['logo']
 save_pws = settings['settings']['save_pws']
 
-
-if  s_password and s_id and s_name == '':
-    print(f"{RED}Configuration not found.{RESET}")
-    with open(os.devnull, "w") as devnull:
-            subprocess.check_call(["MonoCipher","--settings"], stdout=devnull, stderr=subprocess.STDOUT)
-
 if logo:
     TITLE = f"{BLUE}\n{pyfiglet.figlet_format("MonoCipher")}"
 else:
     TITLE = ''
 
-def crt_file(name):
-    pass # TODO : Create file fn
+def config():
+    if s_password == '' and s_id == '' and s_name == '':
+        print(f"{RED}Configuration not found.{RESET}")
+        for i in range(3):
+            time.sleep(1)
+            print(f"Opening settings in {i} second...")
+            subprocess.run(["MonoCipher", "--settings"])
 
 
-def save_pass():
-    pass # TODO : Save Password fn
+
+
+
+def crt_file():
+    with open(save_pws_json, 'w') as j_file:
+        json.dump({'created_on': f'{time.localtime()}'}, j_file)
+
+
+def save_pass(msg, pws):
+    if save_pws:
+        if os.path.exists(save_pws_json):
+            with open(save_pws_json, 'a') as j_file:
+                json.dump({'msg': msg, 'password': pws}, j_file)
+
+        else:
+            crt_file()
+            with open(save_pws_json, 'a') as j_file:
+                json.dump({'msg': msg, 'password': pws}, j_file)
+
+    else:
+        print(f"{RED}Save password option is disabled.{RESET}")
+        for i in range(3):
+            time.sleep(1)
+            print(f"Opening settings in {i} second...")
+            subprocess.run(["MonoCipher", "--settings"])
+
+            
 
 
 def checker(holder, check, err, typ: type):
@@ -259,6 +284,7 @@ def update():
 
 def exit():
     print(f"{RED}Exiting...{RESET}")
+ 
 
 def start():
     options(option=[('Shift Encryption', lambda: shift_enc()),
@@ -280,6 +306,7 @@ def start():
 
 def cli():
     # TODO: Load JSON file from settings.json || os.path.expanduser('~/.monocipher/settings.json') 
+    config() # TODO : ERROR unable to run this process 
     try:
         if len(sys.argv) > 3:
             print(f"{RED}Invalid Input Provided{RESET}")
@@ -305,11 +332,8 @@ def cli():
             create_dir(settings_path)
             run_path = os.path.join(settings_path, "settings.py")
             json_path = os.path.join(settings_path, "settings.json")
-            print(run_path)
             if os.path.exists(run_path) and os.path.exists(json_path):
                 subprocess.run(["python", run_path])
-
-
             else:
                 print(f"The settings folder does not exist or corrupted.")
                 fld_loop = True
